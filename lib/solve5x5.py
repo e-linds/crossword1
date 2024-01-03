@@ -16,35 +16,21 @@
 #solution array
 
 solution_row1 = ["C", "O", "U", "C", "H"]
-solution_row2 = ["A", "x", "M", None, "A"]
+solution_row2 = ["A", None, "M", None, "A"]
 solution_row3 = ["S", "O", "B", "E", "R"]
 solution_row4 = ["T", None, "E", None, "S"]
 solution_row5 = ["E", "A", "R", "T", "H"]
 
 solution_array = [solution_row1, solution_row2, solution_row3, solution_row4, solution_row5]
 
-
-
 # display array
-display_row1 = ["?", "?", "?", "?", "?"]
-display_row2 = ["?", "x", "?", None, "?"]
-display_row3 = ["?", "?", "B", "?", "?"]
-display_row4 = ["?", None, "?", None, "?"]
-display_row5 = ["?", "?", "?", "?", "?"]
+# display_row1 = ["?", "?", "?", "?", "?"]
+# display_row2 = ["?", None, "?", None, "?"]
+# display_row3 = ["?", "?", "B", "?", "?"]
+# display_row4 = ["?", None, "?", None, "?"]
+# display_row5 = ["?", "?", "?", "?", "?"]
 
-# display_row1 = [None, "?", "?", "?", None]
-# display_row2 = ["?", "?", "?", "?", None]
-# display_row3 = ["?", "?", "?", "?", None]
-# display_row4 = ["?", "?", "?", "?", None]
-# display_row5 = [None, "?", "?", "?", "?"]
-
-display_array = [display_row1, display_row2, display_row3, display_row4, display_row5]
-
-# order number, spot number == index plus one, index plus one
-
-
-def find_in_array(ord_num, cell_num):
-    return display_array[ord_num - 1][cell_num -1]
+# display_array = [display_row1, display_row2, display_row3, display_row4, display_row5]
 
 line_full = ('+ ' * 4)
 line_empty = ('+ ' + ' ' * 6)
@@ -52,8 +38,13 @@ letter_space = (' ' * 3)
 line_letter = ((' ' * 2) +("L") + (" " * 3))
 box_end = ('+')
 
+
 # this whole big old function is what displays the grid and letters----------------------------------------------------------------------------
-def display_puzzle():
+def display_puzzle(display_array):
+
+    def find_in_array(ord_num, cell_num):
+        # order number, spot number == index plus one, index plus one
+        return display_array[ord_num - 1][cell_num -1]
 
     
     cell1_top = ""
@@ -147,6 +138,7 @@ def display_puzzle():
 
 
 
+
 #PRINT CLUES. These will eventually come from a table
 def display_clues():   
     print("1 across: test")
@@ -158,12 +150,12 @@ def display_clues():
 
 
 
-def display_all():
-    display_puzzle()
+def display_all(display_array):
+    display_puzzle(display_array)
     print(box_end + " " + f"{line_full}" * 5)
     display_clues()
 
-display_all()
+# display_all()
 
 
 
@@ -171,84 +163,86 @@ display_all()
 # USER INPUTS
 
 
-while display_array != solution_array:
-    ui1 = input("Select a number and direction ")
 
-    if ui1 != "1 across" and ui1 != "4 across" and ui1 != "5 across" and ui1 != "1 down" and ui1 != "2 down" and ui1 != "3 down":
-        print("please input valid choice")
-    else:
-        ui2 = input("What word would you like to guess? ")
-        if len(ui2) != 5:
-                print("please enter five-letter word")
-        else:
-            sep_word = list(ui2)
 
-            def extract_all():
-                array = []
-                for each in display_array:
-                    for each in each:
-                        array.append(each)
-                return array
+# while display_array != solution_array:
+#     ui1 = input("Select a number and direction ")
+
+#     if ui1 != "1 across" and ui1 != "4 across" and ui1 != "5 across" and ui1 != "1 down" and ui1 != "2 down" and ui1 != "3 down":
+#         print("please input valid choice")
+#     else:
+#         ui2 = input("What word would you like to guess? ")
+#         if len(ui2) != 5:
+#                 print("please enter five-letter word")
+#         else:
+#             sep_word = list(ui2)
+
+#             def extract_all():
+#                 array = []
+#                 for each in display_array:
+#                     for each in each:
+#                         array.append(each)
+#                 return array
     
         
-            def place_letters(index):
-                if "across" in ui1:
-                    for each in range(len(sep_word)):
-                        display_array[index][each] = (sep_word[each]).upper()
-                elif "down" in ui1:
-                    for each in range(len(sep_word)):
-                        display_array[each][index] = (sep_word[each]).upper()   
-                display_all() 
+#             def place_letters(index):
+#                 if "across" in ui1:
+#                     for each in range(len(sep_word)):
+#                         display_array[index][each] = (sep_word[each]).upper()
+#                 elif "down" in ui1:
+#                     for each in range(len(sep_word)):
+#                         display_array[each][index] = (sep_word[each]).upper()   
+#                 display_all() 
                 
                         
-            if ui1 == "1 across":
-                place_letters(0)
-                #top row, all positions
+#             if ui1 == "1 across":
+#                 place_letters(0)
+#                 #top row, all positions
 
-            elif ui1 == "4 across":
-                place_letters(2)
-                #third row, all positions
+#             elif ui1 == "4 across":
+#                 place_letters(2)
+#                 #third row, all positions
 
-            elif ui1 == "5 across":
-                place_letters(4)
-                #fifth row, all positions
+#             elif ui1 == "5 across":
+#                 place_letters(4)
+#                 #fifth row, all positions
 
-            elif ui1 == "1 down":
-                place_letters(0)
-                #first column, all positions
+#             elif ui1 == "1 down":
+#                 place_letters(0)
+#                 #first column, all positions
                             
-            elif ui1 == "2 down":
-                place_letters(2)
-                #third column, all positions
+#             elif ui1 == "2 down":
+#                 place_letters(2)
+#                 #third column, all positions
 
-            elif ui1 == "3 down":
-                place_letters(4)
-                #fifth column, all positions
+#             elif ui1 == "3 down":
+#                 place_letters(4)
+#                 #fifth column, all positions
 
-            display_all()
-
-
-    extracted = extract_all()
-
-    solved = False
-    try_again = False
+#             display_all()
 
 
-    while display_array == solution_array and solved == False:
-        print('''
-    You've solved it!''') 
-        solved = True
+#     extracted = extract_all()
 
-    while "?" not in extracted and solved == False and try_again == False:
-        print("Not quite, try again!")
-        try_again = True
+#     solved = False
+#     try_again = False
+
+
+#     while display_array == solution_array and solved == False:
+#         print('''
+#     You've solved it!''') 
+#         solved = True
+
+#     while "?" not in extracted and solved == False and try_again == False:
+#         print("Not quite, try again!")
+#         try_again = True
 
                 
 
         
 
 
-display_all()
+# display_all()
 
 
 

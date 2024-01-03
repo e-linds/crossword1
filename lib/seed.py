@@ -1,15 +1,14 @@
 from models import *
 from sqlalchemy.orm import Session
 
-engine = create_engine("sqlite:///crossword.db")
 
 
 with Session(engine) as session:
 
-    # session.query(PuzzleClass).delete()
-    # session.query(WordClass).delete()
-    # session.query(ClueClass).delete()
-    # session.query(RowClass).delete()
+    session.query(PuzzleClass).delete()
+    session.query(WordClass).delete()
+    session.query(ClueClass).delete()
+    session.query(RowClass).delete()
 
 
     # PuzzleClass.__table__.drop(engine)
@@ -17,12 +16,10 @@ with Session(engine) as session:
     # ClueClass.__table__.drop(engine)
     # RowClass.__table__.drop(engine)
 
-
-    Base.metadata.create_all(engine)
-
-
-    puzzle1 = PuzzleClass(name = "Puzzle 1")
+    puzzle1 = PuzzleClass(name = "Demo Puzzle")
     session.add(puzzle1)
+
+    print("session")
 
     row1 = RowClass(
         p1 = "c",
@@ -35,6 +32,7 @@ with Session(engine) as session:
         puzzle_id = 1
     )
     session.add(row1)
+    session.commit()
 
 
     word1 = WordClass(
@@ -43,6 +41,7 @@ with Session(engine) as session:
         row_id = 1
         )
     session.add(word1)
+    session.commit()
 
     
     clue1 = ClueClass(
@@ -50,6 +49,9 @@ with Session(engine) as session:
         word_id = "1"
     )
     session.add(clue1)
+    session.commit()
+
+    
 
     
 

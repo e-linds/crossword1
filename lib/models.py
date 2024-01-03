@@ -3,6 +3,10 @@ from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
+engine = create_engine("sqlite:///crossword.db")
+Base.metadata.create_all(engine)
+
+
 class PuzzleClass(Base):
     __tablename__ = "puzzles_table"
 
@@ -61,17 +65,6 @@ class RowClass(Base):
         order_number: {self.order_number}, solution?: {self.solution_row}'''
     
     
-# testsolutionrow = RowClass(
-#         p1 = "h",
-#         p2 = "o",
-#         p3 = "u",
-#         p4 = "s",
-#         p5 = "e",
-#         order_number = 2,
-#         solution_row = True,
-#         puzzle_id = 1
-#     )
 
-# print(testsolutionrow)
 
 
