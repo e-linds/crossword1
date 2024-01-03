@@ -85,33 +85,27 @@ Would you like to:
                                     
                                 if "1 across" in ui2:
                                     place_letters(0)
-                                    #top row, all positions
                                     collect_clue()
 
                                 elif "4 across" in ui2:
                                     place_letters(2)
-                                    #third row, all positions
                                     collect_clue()
 
 
                                 elif "5 across" in ui2:
                                     place_letters(4)
-                                    #fifth row, all positions
                                     collect_clue()
 
                                 elif "1 down" in ui2:
                                     place_letters(0)
-                                    #first column, all positions
                                     collect_clue()
                                     
                                 elif "2 down" in ui2:
                                     place_letters(2)
-                                    #third column, all positions
                                     collect_clue()
 
                                 elif "3 down" in ui2:
                                     place_letters(4)
-                                    #fifth column, all positions
                                     collect_clue()
                                     
 
@@ -160,12 +154,6 @@ Would you like to:
                                     else:
                                         print("please submit valid input")
                                 
-
-
-
-
-
-
 
 
 
@@ -355,88 +343,68 @@ Would you like to:
                                         
                                     if "1 across" in ui4:
                                         place_letters(0)
-                                        #top row, all positions
                                         edit_clue()
 
                                     elif "4 across" in ui4:
                                         place_letters(2)
-                                        #third row, all positions
                                         edit_clue()
 
                                     elif "5 across" in ui4:
                                         place_letters(4)
-                                        #fifth row, all positions
                                         edit_clue()
 
                                     elif "1 down" in ui4:
                                         place_letters(0)
-                                        #first column, all positions
                                         edit_clue()
                                         
                                     elif "2 down" in ui4:
                                         place_letters(2)
-                                        #third column, all positions
                                         edit_clue()
 
                                     elif "3 down" in ui4:
                                         place_letters(4)
-                                        #fifth column, all positions
                                         edit_clue()
 
                                                                           
 
-                                    # extracted = extract_all()
+                                    extracted = extract_all()
 
-                                    # ready_to_save = False
-                                    # if "?" not in extracted:
-                                    #     finished = True
+                                    ready_to_save = False
+                                    if "?" not in extracted:
+                                        finished = True
                                         
-                                    # while finished == True and ready_to_save == False:
-                                    #     ui6 = input("Would you like to submit your edits? ")
+                                    while finished == True and ready_to_save == False:
+                                        ui6 = input("Would you like to submit your edits? ")
                                         
-                                    #     if ui6 == "yes" or ui6 == "y":
-                                    #         ui7 = input(f"Would you like to re-name the puzzle? Current name is {chosen_puzzle.name} ")
+                                        if ui6 == "yes" or ui6 == "y":
+                                            ui7 = input(f"Would you like to re-name the puzzle? Current name is {chosen_puzzle.name} ")
 
-                                    #         if ui7 == "yes" or ui7 == "y":
-                                    #             ui8 = input("What would you like the new name to be? ")
-                                    #             chosen_puzzle.name == ui8
+                                            if ui7 == "yes" or ui7 == "y":
+                                                ui8 = input("What would you like the new name to be? ")
+                                                chosen_puzzle.name == ui8
+                                                session.add(chosen_puzzle)
+                                                session.commit()
                                             
-                                    #         elif ui7 == "no" or ui7 == "n":
+                                            rows = session.query(RowClass).filter(RowClass.puzzle_id == chosen_puzzle.id).all()
+                                            count = -1
+                                            for each in rows:
+                                                count += 1
+                                                each.p1= puzzle_in_progress[count][0]
+                                                each.p2= puzzle_in_progress[count][1]
+                                                each.p3= puzzle_in_progress[count][2]
+                                                each.p4= puzzle_in_progress[count][3]
+                                                each.p5= puzzle_in_progress[count][4]
+                                                session.add(each)
+                                                session.commit()
 
                                         
-
-                                    #         newpuzzle = PuzzleClass(name = f"{ui7}")
-                                    #         session.add(newpuzzle)
-                                    #         session.commit()
-
-                                    #         clues = session.query(ClueClass).filter(ClueClass.puzzle_id == None).all()
-                                    #         for each in clues:
-                                    #             each.puzzle_id = newpuzzle.id
-
-                                    #         count = 0
-                                    #         for each in puzzle_in_progress:
-                                    #             count += 1
-                                    #             newrow = RowClass(
-                                    #                 p1 = each[0],
-                                    #                 p2 = each[1],
-                                    #                 p3 = each[2],
-                                    #                 p4 = each[3],
-                                    #                 p5 = each[4],
-                                    #                 order_number = count,
-                                    #                 solution_row = True,
-                                    #                 puzzle_id = newpuzzle.id
-                                    #         )
-                                    #             session.add(newrow)
-                                    #             session.commit()
-
-
-                                    #         print(f"saving {ui7} to database ")
-                                    #         ready_to_save = True
-                                    #     elif ui6 == "no" or ui6== "n":
-                                    #         finished = False
-                                    #         ready_to_save = False
-                                    #     else:
-                                    #         print("please submit valid input")
+                                            print("Changed are saved! ")
+                                            ready_to_save = True
+                                        elif ui6 == "no" or ui6== "n":
+                                            finished = False
+                                            ready_to_save = False
+                                        else:
+                                            print("please submit valid input")
                                     
 
                     
