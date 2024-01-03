@@ -7,15 +7,7 @@ from sqlalchemy.orm import Session
 
 with Session(engine) as session:
 
-    in_progress_row1 = ["C", "O", "U", "C", "H"]
-    in_progress_row2 = ["A", None, "M", None, "A"]
-    in_progress_row3 = ["S", "O", "B", "E", "R"]
-    in_progress_row4 = ["T", None, "E", None, "S"]
-    in_progress_row5 = ["?", "?", "R", "?", "H"]
-
-
-
-    puzzle_in_progress = [in_progress_row1, in_progress_row2, in_progress_row3, in_progress_row4, in_progress_row5] 
+    
         
 
 
@@ -129,139 +121,12 @@ with Session(engine) as session:
         print(box_end + " " + f"{line_full}" * 5)
         # display_clues()
 
-    def build_puzzle():
-
-        finished = False
-
-
-        while finished == False:
-            ui2 = input("Select a number and direction to add word ")
-
-            if "1 across" not in ui2 and "4 across" not in ui2 and "5 across" not in ui2 and "1 down" not in ui2 and "2 down" not in ui2 and "3 down" not in ui2:
-                print("please input valid choice")
-
-            else:
-                num_dir_selected = False
-                while num_dir_selected == False: 
-                    ui3 = input("What word would you like to add? ")
-                    if len(ui3) != 5:
-                        print("please enter five-letter word")
-                    else:
-                        num_dir_selected = True
-                        sep_word = list(ui3)
-
-                        def extract_all():
-                            array = []
-                            for each in puzzle_in_progress:
-                                for each in each:
-                                    array.append(each)
-                            return array
-                        
-                        
-                        def place_letters(index):
-                            if "across" in ui2:
-                                for each in range(len(sep_word)):
-                                    puzzle_in_progress[index][each] = (sep_word[each]).upper()
-                            elif "down" in ui2:
-                                for each in range(len(sep_word)):
-                                    puzzle_in_progress[each][index] = (sep_word[each]).upper()    
-                            display_all()
-
-                        def collect_clue():
-                            ui43 = input("What clue would you like to provide for this word? ")
-                            newclue  = ClueClass(
-                                text = ui43,
-                                num_and_direction = ui2,
-                                puzzle_id = None
-                            )
-                            session.add(newclue)
-                            session.commit()
-
-                            
-                        if "1 across" in ui2:
-                            place_letters(0)
-                            #top row, all positions
-                            collect_clue()
-
-                        elif "4 across" in ui2:
-                            place_letters(2)
-                            #third row, all positions
-                            collect_clue()
-
-
-                        elif "5 across" in ui2:
-                            place_letters(4)
-                            #fifth row, all positions
-                            collect_clue()
-
-                        elif "1 down" in ui2:
-                            place_letters(0)
-                            #first column, all positions
-                            collect_clue()
-                              
-                        elif "2 down" in ui2:
-                            place_letters(2)
-                            #third column, all positions
-                            collect_clue()
-
-                        elif "3 down" in ui2:
-                            place_letters(4)
-                            #fifth column, all positions
-                            collect_clue()
-                            
-
-                        extracted = extract_all()
-
-                        ready_to_save = False
-                        if "?" not in extracted:
-                            finished = True
-                            
-                        while finished == True and ready_to_save == False:
-                            ui4 = input("Would you like to submit your puzzle? ")
-                            
-                            if ui4 == "yes" or ui4 == "y":
-                                ui5 = input("What would you like to name the puzzle? ")
-
-                                newpuzzle = PuzzleClass(name = f"{ui5}")
-                                session.add(newpuzzle)
-                                session.commit()
-
-                                clues = session.query(ClueClass).filter(ClueClass.puzzle_id == None).all()
-                                for each in clues:
-                                    each.puzzle_id = newpuzzle.id
-
-                                count = 0
-                                for each in puzzle_in_progress:
-                                    count += 1
-                                    newrow = RowClass(
-                                        p1 = each[0],
-                                        p2 = each[1],
-                                        p3 = each[2],
-                                        p4 = each[3],
-                                        p5 = each[4],
-                                        order_number = count,
-                                        solution_row = True,
-                                        puzzle_id = newpuzzle.id
-                                )
-                                    session.add(newrow)
-                                    session.commit()
-
-
-                                print(f"saving {ui5} to database ")
-                                ready_to_save = True
-                            elif ui4 == "no" or ui4== "n":
-                                finished = False
-                                ready_to_save = False
-                            else:
-                                print("please submit valid input")
-                        
-
+    
+        
 
             
 
-    display_all()
-    build_puzzle()
-
+ 
 
 
    
