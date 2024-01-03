@@ -3,8 +3,6 @@ from sqlalchemy.orm import Session
 
 with Session(engine) as session:
 
-
-
     line_full = ('+ ' * 4)
     line_empty = ('+ ' + ' ' * 6)
     letter_space = (' ' * 3)

@@ -36,9 +36,9 @@ Would you like to:
                 display_grid(puzzle_in_progress)
 
                 while finished == False:
-                    ui2 = input("Select a number and direction to add word ")
+                    ui2 = (input("Select a number and direction to add word ")).strip()
 
-                    if "1 across" not in ui2 and "4 across" not in ui2 and "5 across" not in ui2 and "1 down" not in ui2 and "2 down" not in ui2 and "3 down" not in ui2:
+                    if ui2 != "1 across" and ui2 != "4 across" and ui2 != "5 across" and ui2 != "1 down" and ui2 != "2 down" and ui2 != "3 down":
                         print("please input valid choice")
 
                     else:
@@ -90,7 +90,6 @@ Would you like to:
                                 elif "4 across" in ui2:
                                     place_letters(2)
                                     collect_clue()
-
 
                                 elif "5 across" in ui2:
                                     place_letters(4)
@@ -225,27 +224,21 @@ Would you like to:
                                 
                             if ui3 == "1 across":
                                 place_letters(0)
-                                #top row, all positions
 
                             elif ui3 == "4 across":
                                 place_letters(2)
-                                #third row, all positions
 
                             elif ui3 == "5 across":
                                 place_letters(4)
-                                #fifth row, all positions
 
                             elif ui3 == "1 down":
                                 place_letters(0)
-                                #first column, all positions
                                             
                             elif ui3 == "2 down":
                                 place_letters(2)
-                                #third column, all positions
 
                             elif ui3 == "3 down":
                                 place_letters(4)
-                                #fifth column, all positions
 
                     extracted = extract_all()
 
@@ -416,4 +409,4 @@ Would you like to:
                 pass
                 #solve crossword
 
-            else: print("please input 1, 2, 3 or 4")
+            else: print("please input 1, 2, 3, 4, or 5")
