@@ -135,20 +135,20 @@ with Session(engine) as session:
 
 
         while finished == False:
-            ui1 = input("Select a number and direction to add word ")
+            ui2 = input("Select a number and direction to add word ")
 
-            if "1 across" not in ui1 and "4 across" not in ui1 and "5 across" not in ui1 and "1 down" not in ui1 and "2 down" not in ui1 and "3 down" not in ui1:
+            if "1 across" not in ui2 and "4 across" not in ui2 and "5 across" not in ui2 and "1 down" not in ui2 and "2 down" not in ui2 and "3 down" not in ui2:
                 print("please input valid choice")
 
             else:
                 num_dir_selected = False
                 while num_dir_selected == False: 
-                    ui2 = input("What word would you like to add? ")
-                    if len(ui2) != 5:
+                    ui3 = input("What word would you like to add? ")
+                    if len(ui3) != 5:
                         print("please enter five-letter word")
                     else:
                         num_dir_selected = True
-                        sep_word = list(ui2)
+                        sep_word = list(ui3)
 
                         def extract_all():
                             array = []
@@ -159,37 +159,55 @@ with Session(engine) as session:
                         
                         
                         def place_letters(index):
-                            if "across" in ui1:
+                            if "across" in ui2:
                                 for each in range(len(sep_word)):
                                     puzzle_in_progress[index][each] = (sep_word[each]).upper()
-                            elif "down" in ui1:
+                            elif "down" in ui2:
                                 for each in range(len(sep_word)):
                                     puzzle_in_progress[each][index] = (sep_word[each]).upper()    
                             display_all()
+
+                        def collect_clue():
+                            ui43 = input("What clue would you like to provide for this word? ")
+                            newclue  = ClueClass(
+                                text = ui43,
+                                num_and_direction = ui2,
+                                puzzle_id = None
+                            )
+                            session.add(newclue)
+                            session.commit()
+
                             
-                        if "1 across" in ui1:
+                        if "1 across" in ui2:
                             place_letters(0)
                             #top row, all positions
+                            collect_clue()
 
-                        elif "4 across" in ui1:
+                        elif "4 across" in ui2:
                             place_letters(2)
                             #third row, all positions
+                            collect_clue()
 
-                        elif "5 across" in ui1:
+
+                        elif "5 across" in ui2:
                             place_letters(4)
                             #fifth row, all positions
+                            collect_clue()
 
-                        elif "1 down" in ui1:
+                        elif "1 down" in ui2:
                             place_letters(0)
                             #first column, all positions
-                                
-                        elif "2 down" in ui1:
+                            collect_clue()
+                              
+                        elif "2 down" in ui2:
                             place_letters(2)
                             #third column, all positions
+                            collect_clue()
 
-                        elif "3 down" in ui1:
+                        elif "3 down" in ui2:
                             place_letters(4)
                             #fifth column, all positions
+                            collect_clue()
                             
 
                         extracted = extract_all()
@@ -199,14 +217,18 @@ with Session(engine) as session:
                             finished = True
                             
                         while finished == True and ready_to_save == False:
-                            ui3 = input("Would you like to submit your puzzle? ")
+                            ui4 = input("Would you like to submit your puzzle? ")
                             
-                            if ui3 == "yes" or ui3 == "y":
-                                ui4 = input("What would you like to name the puzzle? ")
+                            if ui4 == "yes" or ui4 == "y":
+                                ui5 = input("What would you like to name the puzzle? ")
 
-                                newpuzzle = PuzzleClass(name = f"{ui4}")
+                                newpuzzle = PuzzleClass(name = f"{ui5}")
                                 session.add(newpuzzle)
                                 session.commit()
+
+                                clues = session.query(ClueClass).filter(ClueClass.puzzle_id == None).all()
+                                for each in clues:
+                                    each.puzzle_id = newpuzzle.id
 
                                 count = 0
                                 for each in puzzle_in_progress:
@@ -225,9 +247,9 @@ with Session(engine) as session:
                                     session.commit()
 
 
-                                print(f"saving {ui4} to database ")
+                                print(f"saving {ui5} to database ")
                                 ready_to_save = True
-                            elif ui3 == "no" or ui3 == "n":
+                            elif ui4 == "no" or ui4== "n":
                                 finished = False
                                 ready_to_save = False
                             else:

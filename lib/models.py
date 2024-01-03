@@ -4,7 +4,6 @@ from sqlalchemy.orm import declarative_base, relationship
 Base = declarative_base()
 
 engine = create_engine("sqlite:///crossword.db")
-Base.metadata.create_all(engine)
 
 
 class PuzzleClass(Base):
@@ -39,7 +38,8 @@ class ClueClass(Base):
 
     id = Column(Integer, primary_key = True)
     text = Column(String)
-    word_id = Column(String, ForeignKey("words_table.id"))
+    num_and_direction = Column(String)
+    puzzle_id = Column(Integer, ForeignKey("puzzles_table.id"))
 
     def __repr__(self):
         return f"{self.text}"
