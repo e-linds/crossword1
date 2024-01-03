@@ -70,13 +70,17 @@ Would you like to:
 
                                 def collect_clue():
                                     ui43 = input("What clue would you like to provide for this word? ")
-                                    newclue  = ClueClass(
-                                        text = ui43,
-                                        num_and_direction = ui2,
-                                        puzzle_id = None
-                                    )
-                                    session.add(newclue)
-                                    session.commit()
+                                    clue_exist = session.query(ClueClass).filter(ClueClass.num_and_direction == ui2, ClueClass.puzzle_id == None).first()
+                                    if clue_exist:
+                                        clue_exist.text = ui43
+                                    else:
+                                        newclue  = ClueClass(
+                                            text = ui43,
+                                            num_and_direction = ui2,
+                                            puzzle_id = None
+                                        )
+                                        session.add(newclue)
+                                        session.commit()
 
                                     
                                 if "1 across" in ui2:
@@ -289,6 +293,8 @@ Would you like to:
 
                 if (ui3.strip()).lower() == "delete":
                     session.query(PuzzleClass).filter(PuzzleClass.id == chosen_puzzle.id).delete()
+                    session.query(RowClass).filter(RowClass.puzzle_id == chosen_puzzle.id).delete()
+                    session.query(ClueClass).filter(ClueClass.puzzle_id == chosen_puzzle.id).delete()
                     session.commit()
                     print("puzzle successfully deleted")
                 elif (ui3.strip()).lower() == "edit":
@@ -298,18 +304,9 @@ Would you like to:
                     for each in chosen_puzzle.rows:
                         solution_row = [each.p1, each.p2, each.p3, each.p4, each.p5]
                         solution_array.append(solution_row)   
-
-                    # display_grid(solution_array)
-                    # display_clues(chosen_puzzle.id)
-
-                    # in_progress_row1 = ["?", "?", "?", "?", "?"]
-                    # in_progress_row2 = ["?", None, "?", None, "?"]
-                    # in_progress_row3 = ["?", "?", "?", "?", "?"]
-                    # in_progress_row4 = ["?", None, "?", None, "?"]
-                    # in_progress_row5 = ["?", "?", "?", "?", "?"]
-
+                    
                     puzzle_in_progress = solution_array
-                            
+
                     finished = False
                     
                     display_grid(puzzle_in_progress)
@@ -347,111 +344,99 @@ Would you like to:
                                                 puzzle_in_progress[each][index] = (sep_word[each]).upper()    
                                         display_grid(puzzle_in_progress)
 
-                                    # def edit_clue():
-                                    #     current_clue = session.query(ClueClass).filter(ClueClass.puzzle_id == chosen_puzzle.id, ClueClass.num_and_direction == ui4)
-                                    #     ui43 = input(f"Would you like to edit the clue for this word? Current clue is {current_clue.text} ")
-                                    #     if ui43 == "yes" or ui43 == "y":
-                                    #         ui44 = input("What would you like the new clue to be? ")
-                                    #         current_clue.text = ui44
-                                        # newclue  = ClueClass(
-                                        #     text = ui43,
-                                        #     num_and_direction = ui4,
-                                        #     puzzle_id = None
-                                        # )
-                                        # session.add(newclue)
-                                        # session.commit()
-
+                                    def edit_clue():
+                                        current_clue = session.query(ClueClass).filter(ClueClass.puzzle_id == chosen_puzzle.id, ClueClass.num_and_direction == ui4).first()
+                                        ui43 = input(f"Would you like to edit the clue for this word? Current clue is '{current_clue.text}' ")
+                                        if ui43 == "yes" or ui43 == "y":
+                                            ui44 = input("What would you like the new clue to be? ")
+                                            current_clue.text = ui44
+                                            session.add(current_clue)
+                                            session.commit()
                                         
                                     if "1 across" in ui4:
                                         place_letters(0)
                                         #top row, all positions
-                                        # collect_clue()
+                                        edit_clue()
 
                                     elif "4 across" in ui4:
                                         place_letters(2)
                                         #third row, all positions
-                                        # collect_clue()
-
+                                        edit_clue()
 
                                     elif "5 across" in ui4:
                                         place_letters(4)
                                         #fifth row, all positions
-                                        # collect_clue()
+                                        edit_clue()
 
                                     elif "1 down" in ui4:
                                         place_letters(0)
                                         #first column, all positions
-                                        # collect_clue()
+                                        edit_clue()
                                         
                                     elif "2 down" in ui4:
                                         place_letters(2)
                                         #third column, all positions
-                                        # collect_clue()
+                                        edit_clue()
 
                                     elif "3 down" in ui4:
                                         place_letters(4)
                                         #fifth column, all positions
-                                        # collect_clue()
+                                        edit_clue()
 
-                                    current_clue = session.query(ClueClass).filter(ClueClass.puzzle_id == chosen_puzzle.id, ClueClass.num_and_direction == ui4)
-                                    print(current_clue)
-                                    print(current_clue.text)
+                                                                          
 
+                                    # extracted = extract_all()
 
+                                    # ready_to_save = False
+                                    # if "?" not in extracted:
+                                    #     finished = True
                                         
-
-                                    extracted = extract_all()
-
-                                    ready_to_save = False
-                                    if "?" not in extracted:
-                                        finished = True
+                                    # while finished == True and ready_to_save == False:
+                                    #     ui6 = input("Would you like to submit your edits? ")
                                         
-                                    while finished == True and ready_to_save == False:
-                                        ui6 = input("Would you like to submit your edits? ")
-                                        
-                                        if ui6 == "yes" or ui6 == "y":
-                                            ui7 = input(f"Would you like to re-name the puzzle? Current name is {chosen_puzzle.name} ")
+                                    #     if ui6 == "yes" or ui6 == "y":
+                                    #         ui7 = input(f"Would you like to re-name the puzzle? Current name is {chosen_puzzle.name} ")
 
-                                            if ui7 == "yes" or ui7 == "y":
-                                                ui8 = input("What would you like the new name to be? ")
-                                                chosen_puzzle.name == ui8
+                                    #         if ui7 == "yes" or ui7 == "y":
+                                    #             ui8 = input("What would you like the new name to be? ")
+                                    #             chosen_puzzle.name == ui8
                                             
-                                        #     elif ui7 == "no" or ui7 == "n":
+                                    #         elif ui7 == "no" or ui7 == "n":
 
                                         
 
-                                        #     newpuzzle = PuzzleClass(name = f"{ui7}")
-                                        #     session.add(newpuzzle)
-                                        #     session.commit()
+                                    #         newpuzzle = PuzzleClass(name = f"{ui7}")
+                                    #         session.add(newpuzzle)
+                                    #         session.commit()
 
-                                        #     clues = session.query(ClueClass).filter(ClueClass.puzzle_id == None).all()
-                                        #     for each in clues:
-                                        #         each.puzzle_id = newpuzzle.id
+                                    #         clues = session.query(ClueClass).filter(ClueClass.puzzle_id == None).all()
+                                    #         for each in clues:
+                                    #             each.puzzle_id = newpuzzle.id
 
-                                        #     count = 0
-                                        #     for each in puzzle_in_progress:
-                                        #         count += 1
-                                        #         newrow = RowClass(
-                                        #             p1 = each[0],
-                                        #             p2 = each[1],
-                                        #             p3 = each[2],
-                                        #             p4 = each[3],
-                                        #             p5 = each[4],
-                                        #             order_number = count,
-                                        #             solution_row = True,
-                                        #             puzzle_id = newpuzzle.id
-                                        #     )
-                                        #         session.add(newrow)
-                                        #         session.commit()
+                                    #         count = 0
+                                    #         for each in puzzle_in_progress:
+                                    #             count += 1
+                                    #             newrow = RowClass(
+                                    #                 p1 = each[0],
+                                    #                 p2 = each[1],
+                                    #                 p3 = each[2],
+                                    #                 p4 = each[3],
+                                    #                 p5 = each[4],
+                                    #                 order_number = count,
+                                    #                 solution_row = True,
+                                    #                 puzzle_id = newpuzzle.id
+                                    #         )
+                                    #             session.add(newrow)
+                                    #             session.commit()
 
 
-                                        #     print(f"saving {ui7} to database ")
-                                        #     ready_to_save = True
-                                        # elif ui6 == "no" or ui6== "n":
-                                        #     finished = False
-                                        #     ready_to_save = False
-                                        # else:
-                                        #     print("please submit valid input")
+                                    #         print(f"saving {ui7} to database ")
+                                    #         ready_to_save = True
+                                    #     elif ui6 == "no" or ui6== "n":
+                                    #         finished = False
+                                    #         ready_to_save = False
+                                    #     else:
+                                    #         print("please submit valid input")
                                     
 
                     
@@ -462,4 +447,5 @@ Would you like to:
             elif ui1 == "5":
                 pass
                 #solve crossword
+
             else: print("please input 1, 2, 3 or 4")
