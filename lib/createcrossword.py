@@ -60,15 +60,18 @@ with Session(engine) as session:
         uiword = ((uinext).strip()).lower()
         word_list.append(list(uiword))
 
-
+        print(len(word_list) - 1)
         count = len(word_list) - 1
         matches = []
         for each in list(uiword):
             count = count - 1
             if count >= 0:
+                print(word_list[count])
                 for letter in word_list[count]:
                     if word_list[count] != list(uiword):
                         if each == letter:  
+                            print(each)
+                            print(letter)
                             match = [count, word_list[count].index(letter)]
                             #this means match will be [index of matching word, index of matching letter within word]
                             matches.append(match)

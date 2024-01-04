@@ -1,6 +1,7 @@
 from models import *
 from sqlalchemy.orm import Session
 from display_functions import display_grid, display_clues
+import sys
 
 if __name__ == "__main__":
 
@@ -18,6 +19,7 @@ Would you like to:
 3: Edit or delete an existing 5x5 puzzle
 4: Create a crossword puzzle
 5: Solve a crossword puzzle
+6: Exit
                                                 
 ''')
 
@@ -259,7 +261,6 @@ Would you like to:
                         try_again = True
             
             elif ui1 == "3":
-                #IN THE MIDDLE OF FIGURING OUT HOW TO EDIT AN EXISTING PUZZLE - PULLING LOTS OF LOGIC FROM #1
                 
                 all_5x5s = session.query(PuzzleClass).all()
                         
@@ -403,10 +404,10 @@ Would you like to:
                     
 
             elif ui1 == "4":
-                pass
-                #create crossword
+                print("Crossword: coming soon!")
             elif ui1 == "5":
-                pass
-                #solve crossword
-
-            else: print("please input 1, 2, 3, 4, or 5")
+                print("Crossword: coming soon!")
+            elif ui1 == "6":
+                sys.exit(0)
+                
+            else: print("please input a valid number option")
