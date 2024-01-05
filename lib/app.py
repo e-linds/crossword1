@@ -1,7 +1,9 @@
 from models import *
 from sqlalchemy.orm import Session
 from display_functions import display_grid, display_clues
-import sys
+import sys, random, time
+import cowsay
+
 
 if __name__ == "__main__":
 
@@ -10,7 +12,8 @@ if __name__ == "__main__":
         started = False
 
         while started == False:
-            
+
+                      
             ui1 = input('''
 Would you like to:
                         
@@ -18,8 +21,7 @@ Would you like to:
 2: Solve a 5x5 puzzle
 3: Edit or delete an existing 5x5 puzzle
 4: Create a crossword puzzle
-5: Solve a crossword puzzle
-6: Exit
+5: Exit
                                                 
 ''')
 
@@ -250,13 +252,17 @@ Would you like to:
 
                     while display_array == solution_array and solved == False:
                         print(" ")
-                        print("You've solved it!")
+                        cowsay.cow("Congrats, you've solved it!")
+                        time.sleep(2)
+
                         
                         solved = True
 
                     while "?" not in extracted and solved == False and try_again == False:
                         print(" ")
-                        print("Not quite, try again!")
+                        print("Not quite! One or more letters are incorrect. Try again!")
+                        time.sleep(2)
+
                         
                         try_again = True
             
@@ -375,7 +381,7 @@ Would you like to:
 
                                             if ui7 == "yes" or ui7 == "y":
                                                 ui8 = input("What would you like the new name to be? ")
-                                                chosen_puzzle.name == ui8
+                                                chosen_puzzle.name = ui8
                                                 session.add(chosen_puzzle)
                                                 session.commit()
                                             
@@ -402,12 +408,117 @@ Would you like to:
                                     
 
                     
-
+            # create crossword puzzle
             elif ui1 == "4":
-                print("Crossword: coming soon!")
+                
+                line_full = ('+ ' * 3)
+                line_empty = ('+ ' + ' ' * 4)
+                # letter_space = (' ' * 3)
+                line_letter = ("+" + (' ' * 2) +("L") + (" " * 2) + "+")
+                box_end = ('+')
+
+
+                def add_horiz_word(newword):
+
+                    def print_word_horiz(newword):
+                        boxes = []
+                        for each in list(newword):
+                            newbox = ("+" + (' ' * 2) +(f"{each.upper()}") + (" " * 2))
+                            boxes.append(newbox)
+                        print("".join(boxes) + box_end)
+
+                    word_len = len(newword)
+                    print(line_full * word_len + box_end) 
+                    print_word_horiz(newword)
+                    print(line_full * word_len + box_end) 
+
+
+
+                def add_vert_word(newword, index = None):
+                        
+                        if index:
+                            spaces = (' ' * (index * 6))
+                        else:
+                            spaces = ""
+
+                        for each in list(newword):
+                            print(spaces + line_full + box_end)
+                            print(spaces + "+" + (' ' * 2) +(f"{each.upper()}") + (" " * 2) + "+")
+                        
+
+
+                word_list = []
+
+                ui1 = input("What word would you like to add? ")
+                firstword = ((ui1).strip()).lower()
+
+                word_list.append(list(firstword))
+                word_list.append("test")
+                word_list.append("goodbye")
+                
+
+                add_horiz_word(firstword)
+
+                while True:
+
+                    uinext = input("What word would you like to add? ")
+
+                    uiword = ((uinext).strip()).lower()
+                    word_list.append(list(uiword))
+
+                    count = len(word_list)
+                    matches = []
+                    for each in list(uiword):
+                        count = count - 1
+                        if count >= 0 and word_list[count] != list(uiword):
+                            for letter in word_list[count]:
+                                if each == letter:  
+                                    match = [count, word_list[count].index(letter)]
+                                    #this means match will be [index of matching word, index of matching letter within word]
+                                    matches.append(match)
+                    print(matches)
+
+                
+
+                    selected_match = random.choice(matches)
+                    match_word = word_list[selected_match[0]]
+                    match_letter = match_word[selected_match[1]]
+
+                
+                    #[index of matching word within wordlist]
+                    #[index of matching letter within word - this will dictate how many spaces we need to add before the word is printed]
+
+                    # add vertical word to existing horizontal
+                    def display_two_words(vertword, horizword, letter):
+
+                        split_index = vertword.index(letter)
+                        first_half = vertword[0:split_index]
+                        second_half = vertword[split_index+1: len(vertword)+1]
+
+                        add_vert_word(first_half, horizword.index(letter))
+                        add_horiz_word(horizword)
+                        add_vert_word(second_half, horizword.index(letter))
+
+
+                    # if new word is an even number, display horizontally
+                    if (word_list.index(list(uiword)) % 2) == 0:
+                        display_two_words(match_word, uiword, match_letter)
+                    #if new word is an odd number, display vertically
+                    else:
+                        display_two_words(uiword, match_word, match_letter)
+
+
+                    # we'll assume that the first word was added horizonally and now the third word is too
+                    def display_three_words(newword, oldword, letter):
+
+                        add_vert_word(first_half, horizword.index(letter))
+                        add_horiz_word(horizword)
+                        add_vert_word(second_half, horizword.index(letter))
+                        
+
+            # elif ui1 == "5":
+            #     print("Crossword: coming soon!")
             elif ui1 == "5":
-                print("Crossword: coming soon!")
-            elif ui1 == "6":
                 sys.exit(0)
                 
             else: print("please input a valid number option")
