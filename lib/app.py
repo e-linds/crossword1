@@ -453,33 +453,27 @@ Would you like to:
                 firstword = ((ui1).strip()).lower()
 
                 word_list.append(list(firstword))
-                word_list.append("test")
-                word_list.append("goodbye")
+                # word_list.append("test")
+                # word_list.append("goodbye")
                 
 
                 add_horiz_word(firstword)
 
-                while True:
+                def add_word(input):
 
-                    uinext = input("What word would you like to add? ")
-
-                    uiword = ((uinext).strip()).lower()
-                    word_list.append(list(uiword))
-
-                    count = len(word_list)
                     matches = []
-                    for each in list(uiword):
-                        count = count - 1
-                        if count >= 0 and word_list[count] != list(uiword):
-                            for letter in word_list[count]:
-                                if each == letter:  
-                                    match = [count, word_list[count].index(letter)]
-                                    #this means match will be [index of matching word, index of matching letter within word]
-                                    matches.append(match)
-                    print(matches)
+                    for word in word_list:
+                        for letter in word:
+                            if word != list(input):
+                                for each in list(input):
+                                    if each == letter:
+                                        match = [word_list.index(word), word.index(letter)]
+                        #                 #this means match will be [index of matching word, index of matching letter within word]
+                                        matches.append(match)
+                    # print(matches)
+                    # print(word_list)
 
-                
-
+            
                     selected_match = random.choice(matches)
                     match_word = word_list[selected_match[0]]
                     match_letter = match_word[selected_match[1]]
@@ -508,17 +502,29 @@ Would you like to:
                         display_two_words(uiword, match_word, match_letter)
 
 
-                    # we'll assume that the first word was added horizonally and now the third word is too
-                    def display_three_words(newword, oldword, letter):
+                while True:
 
-                        add_vert_word(first_half, horizword.index(letter))
-                        add_horiz_word(horizword)
-                        add_vert_word(second_half, horizword.index(letter))
+                    uinext = input("What word would you like to add? ")
+
+                    uiword = ((uinext).strip()).lower()
+                    word_list.append(list(uiword))
+
+                    add_word(uiword)
+
+                    
+
+
+                    # we'll assume that the first word was added horizonally and now the third word is too
+                    # def display_three_words(newword, oldword, letter):
+
+                    #     add_vert_word(first_half, horizword.index(letter))
+                    #     add_horiz_word(horizword)
+                    #     add_vert_word(second_half, horizword.index(letter))
                         
 
             # elif ui1 == "5":
             #     print("Crossword: coming soon!")
             elif ui1 == "5":
                 sys.exit(0)
-                
+                            
             else: print("please input a valid number option")
